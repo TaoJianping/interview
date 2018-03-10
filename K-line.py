@@ -20,11 +20,13 @@ template = env.get_template('k线图-高清.html')
 collection_name = "MU"
 
 class K_Line(object):
+    """model"""
     def __init__(self, name):
         self.name = name
         self.k_line_data = self.get_xhr_data()
 
     def get_xhr_data(self):
+        """拿到JSON数据并做缓存"""
         file_name = self.name
         dir_name = "cache"
         if os.path.exists(dir_name) is not True:
@@ -58,10 +60,12 @@ class K_Line(object):
                 return json.loads(s)
 
     def save(self):
+        """保存至mongodb"""
         data = self.__dict__
         db[self.name].insert(data)
 
     def save_k_line_html(self):
+        """用html展示k线图"""
         k_line_data = list(db[self.name].find())[0]['k_line_data']
         data = []
         for i in k_line_data:
